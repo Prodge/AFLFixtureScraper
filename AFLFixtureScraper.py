@@ -58,21 +58,39 @@ def getAway():
         if html[j:j+len(end)] == end:
             return html[:j]
 
+def generate_files(rounds):
+    for (round_number, round) in enumerate(rounds):
+        with open('round{}fix.php'.format(round_number + 1),'w+') as f:
+            f.write('</php\n')
+            f.write('$vs = " -vs- ";\n')
+            for game in round:
+                f.write('$g{}t0 = "{}";\n'.format(game, round[game]['home']))
+                f.write('$g{}t1 = "{}";\n'.format(game, round[game]['away']))
+            f.write('?>\n')
+
 def main():
     global html
     maxNumGames = 9
     numRounds = 23
     year = 2016
+    rounds = []
     for x in range(numRounds):
         url = "http://www.afl.com.au/fixture?roundId=CD_R" + str(year) + "014" + str("%02d" % (x+1)) + "#tround"
         page = urllib2.urlopen(url)
         html = page.read()
+        games = {}
         print('\n\nRound ' + str(x+1) + ':')
         for i in range(maxNumGames):
             if not nextGame():
                 continue
             home = getHome()
             away = getAway()
+            games[i] = {
+                'home': home,
+                'away': away,
+            }
             print('Game: ' + str(i+1) + '   Home: ' + home + '\n          Away: ' + away)
+        rounds.append(games)
+    generate_files(rounds)
 
 main()
