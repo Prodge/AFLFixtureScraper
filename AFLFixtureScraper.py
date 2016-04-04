@@ -61,11 +61,11 @@ def getAway():
 def generate_files(rounds):
     for (round_number, round) in enumerate(rounds):
         with open('round{}fix.php'.format(round_number + 1),'w+') as f:
-            f.write('</php\n')
+            f.write('<?php\n')
             f.write('$vs = " -vs- ";\n')
             for game in round:
-                f.write('$g{}t0 = "{}";\n'.format(game, round[game]['home']))
-                f.write('$g{}t1 = "{}";\n'.format(game, round[game]['away']))
+                f.write('$g{}t0 = "{}";\n'.format(game + 1, round[game]['home']))
+                f.write('$g{}t1 = "{}";\n'.format(game + 1, round[game]['away']))
             f.write('?>\n')
 
 def main():
